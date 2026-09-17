@@ -19,11 +19,11 @@ export class MyBigNumber {
       const newCarry = Math.floor(total / 10);
 
       this.log(
-        `Buoc ${step}: Lay ${d1} cong voi ${d2}` +
-          (carry > 0 ? ` cong voi nho ${carry}` : ``) +
-          ` duoc ${total}. Luu ${digit} vao ket qua` +
-          (newCarry > 0 ? ` va nho ${newCarry}` : `, het nho`) +
-          `. Ket qua tam: "${digit + reversed}".`
+        `Bước ${step}: Lấy ${d1} cộng với ${d2}` +
+          (carry > 0 ? ` cộng với nhớ ${carry}` : ``) +
+          ` được ${total}. Lưu ${digit} vào kết quả` +
+          (newCarry > 0 ? ` và nhớ ${newCarry}` : `, hết nhớ`) +
+          `. Kết quả tạm: "${digit + reversed}".`
       );
 
       reversed = digit.toString() + reversed;
