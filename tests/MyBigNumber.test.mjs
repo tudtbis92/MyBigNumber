@@ -37,6 +37,6 @@ describe("MyBigNumber.sum (core, Task 1)", () => {
     const svc = new MyBigNumber((m) => logs.push(m));
     assert.equal(svc.sum("1234", "897"), "2131");
     assert.equal(logs.length, 4);
-    assert.match(logs[0], /Lay 4 cong voi 7 duoc 11/);
+    assert.match(logs[0], /Lấy 4 cộng với 7 được 11/);
   });
 });

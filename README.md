@@ -28,8 +28,8 @@ Kết quả nằm trong `dist/` (`dist/MyBigNumber.js`, `dist/demo.js`).
 npm run demo
 ```
 
-Mỗi bước cộng được log ra console
-(`Buoc 1: Lay 4 cong voi 7 duoc 11...` — tiếng Việt không dấu để tránh lỗi font console).
+Mỗi bước cộng được log ra console bằng tiếng Việt có dấu
+(`Bước 1: Lấy 4 cộng với 7 được 11...`).
 
 ## Chạy Unit Testing
 

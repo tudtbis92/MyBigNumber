@@ -13,7 +13,7 @@ export function App() {
   function onAdd(e: React.FormEvent) {
     e.preventDefault()
     if (!DIGITS.test(a) || !DIGITS.test(b)) {
-      setError('Moi so chi duoc chua cac ki so 0-9 (theo gia dinh Task 1).')
+      setError('Mỗi số chỉ được chứa các kí số 0-9 (theo giả định Task 1).')
       setResult('')
       setSteps([])
       return
@@ -27,14 +27,14 @@ export function App() {
 
   return (
     <div className="container py-4" style={{ maxWidth: 720 }}>
-      <h1 className="mb-3">Cong 2 so lon</h1>
+      <h1 className="mb-3">Cộng 2 số lớn</h1>
       <p className="text-muted">
-        Dung lai loi <code>MyBigNumber.sum()</code> (Task 1), cong theo tung cot
-        nhu hoc sinh tieu hoc.
+        Dùng lại lõi <code>MyBigNumber.sum()</code> (Task 1), cộng theo từng cột
+        như học sinh tiểu học.
       </p>
       <form onSubmit={onAdd}>
         <div className="mb-3">
-          <label className="form-label" htmlFor="stn1">So thu nhat</label>
+          <label className="form-label" htmlFor="stn1">Số thứ nhất</label>
           <input
             id="stn1"
             className="form-control font-monospace"
@@ -44,7 +44,7 @@ export function App() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label" htmlFor="stn2">So thu hai</label>
+          <label className="form-label" htmlFor="stn2">Số thứ hai</label>
           <input
             id="stn2"
             className="form-control font-monospace"
@@ -54,7 +54,7 @@ export function App() {
           />
         </div>
         {error && <div className="alert alert-danger">{error}</div>}
-        <button type="submit" className="btn btn-primary">Cong</button>
+        <button type="submit" className="btn btn-primary">Cộng</button>
       </form>
 
       {result && (
@@ -65,7 +65,7 @@ export function App() {
 
       {steps.length > 0 && (
         <div className="mt-3">
-          <h2 className="h5">Tien trinh thuc hien phep toan</h2>
+          <h2 className="h5">Tiến trình thực hiện phép toán</h2>
           <ol className="list-group list-group-numbered">
             {steps.map((s, i) => (
               <li key={i} className="list-group-item font-monospace">{s}</li>
