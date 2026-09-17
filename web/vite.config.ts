@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     fs: {
-      // Cho phep import loi dung chung src/MyBigNumber.ts o ngoai web/
+      // Cho phép import lõi dùng chung src/MyBigNumber.ts ở ngoài web/
       allow: ['..'],
     },
   },

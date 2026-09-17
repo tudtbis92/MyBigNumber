@@ -1,18 +1,41 @@
 import { useState } from 'react'
 import { MyBigNumber } from '../../src/MyBigNumber'
+import './app.css'
 
 const DIGITS = /^[0-9]+$/
 
+interface NumberInputProps {
+  id: string
+  label: string
+  value: string
+  onChange: (value: string) => void
+}
+
+function NumberInput({ id, label, value, onChange }: NumberInputProps) {
+  return (
+    <div className="mb-3">
+      <label className="form-label" htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        className="form-control font-monospace"
+        value={value}
+        onChange={(e) => onChange(e.target.value.trim())}
+        inputMode="numeric"
+      />
+    </div>
+  )
+}
+
 export function App() {
-  const [a, setA] = useState('1234')
-  const [b, setB] = useState('897')
+  const [firstNumber, setFirstNumber] = useState('1234')
+  const [secondNumber, setSecondNumber] = useState('897')
   const [error, setError] = useState('')
   const [result, setResult] = useState('')
   const [steps, setSteps] = useState<string[]>([])
 
   function onAdd(e: React.FormEvent) {
     e.preventDefault()
-    if (!DIGITS.test(a) || !DIGITS.test(b)) {
+    if (!DIGITS.test(firstNumber) || !DIGITS.test(secondNumber)) {
       setError('Mỗi số chỉ được chứa các kí số 0-9 (theo giả định Task 1).')
       setResult('')
       setSteps([])
@@ -20,46 +43,28 @@ export function App() {
     }
     setError('')
     const logged: string[] = []
-    const r = new MyBigNumber((m) => logged.push(m)).sum(a, b)
-    setResult(r)
+    const sumResult = new MyBigNumber((message) => logged.push(message)).sum(firstNumber, secondNumber)
+    setResult(sumResult)
     setSteps(logged)
   }
 
   return (
-    <div className="container py-4" style={{ maxWidth: 720 }}>
+    <div className="container py-4 app-shell">
       <h1 className="mb-3">Cộng 2 số lớn</h1>
       <p className="text-muted">
         Dùng lại lõi <code>MyBigNumber.sum()</code> (Task 1), cộng theo từng cột
         như học sinh tiểu học.
       </p>
       <form onSubmit={onAdd}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="stn1">Số thứ nhất</label>
-          <input
-            id="stn1"
-            className="form-control font-monospace"
-            value={a}
-            onChange={(e) => setA(e.target.value.trim())}
-            inputMode="numeric"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="stn2">Số thứ hai</label>
-          <input
-            id="stn2"
-            className="form-control font-monospace"
-            value={b}
-            onChange={(e) => setB(e.target.value.trim())}
-            inputMode="numeric"
-          />
-        </div>
+        <NumberInput id="stn1" label="Số thứ nhất" value={firstNumber} onChange={setFirstNumber} />
+        <NumberInput id="stn2" label="Số thứ hai" value={secondNumber} onChange={setSecondNumber} />
         {error && <div className="alert alert-danger">{error}</div>}
         <button type="submit" className="btn btn-primary">Cộng</button>
       </form>
 
       {result && (
         <div className="alert alert-success mt-3 font-monospace">
-          {a} + {b} = <strong>{result}</strong>
+          {firstNumber} + {secondNumber} = <strong>{result}</strong>
         </div>
       )}
 
