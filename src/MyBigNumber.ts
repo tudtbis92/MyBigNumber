@@ -1,6 +1,19 @@
 /** Lõi cộng 2 số lớn (dạng chuỗi) theo thuật toán học sinh tiểu học. */
 export type Logger = (message: string) => void;
 
+const CHAR_CODE_ZERO = '0'.charCodeAt(0);
+
+interface StepInfo {
+  step: number;
+  digit1: number;
+  digit2: number;
+  carry: number;
+  total: number;
+  digit: number;
+  newCarry: number;
+  resultSoFar: string;
+}
+
 export class MyBigNumber {
   constructor(private readonly log: Logger = console.log) {}
 
@@ -8,31 +21,35 @@ export class MyBigNumber {
     let i = stn1.length - 1;
     let j = stn2.length - 1;
     let carry = 0;
-    let reversed = "";
+    let result = "";
     let step = 1;
 
     while (i >= 0 || j >= 0 || carry > 0) {
-      const d1 = i >= 0 ? stn1.charCodeAt(i) - 48 : 0;
-      const d2 = j >= 0 ? stn2.charCodeAt(j) - 48 : 0;
-      const total = d1 + d2 + carry;
+      const digit1 = i >= 0 ? stn1.charCodeAt(i) - CHAR_CODE_ZERO : 0;
+      const digit2 = j >= 0 ? stn2.charCodeAt(j) - CHAR_CODE_ZERO : 0;
+      const total = digit1 + digit2 + carry;
       const digit = total % 10;
       const newCarry = Math.floor(total / 10);
 
-      this.log(
-        `Bước ${step}: Lấy ${d1} cộng với ${d2}` +
-          (carry > 0 ? ` cộng với nhớ ${carry}` : ``) +
-          ` được ${total}. Lưu ${digit} vào kết quả` +
-          (newCarry > 0 ? ` và nhớ ${newCarry}` : `, hết nhớ`) +
-          `. Kết quả tạm: "${digit + reversed}".`
-      );
+      this.log(this.formatStep({ step, digit1, digit2, carry, total, digit, newCarry, resultSoFar: result }));
 
-      reversed = digit.toString() + reversed;
+      result = digit.toString() + result;
       carry = newCarry;
       i--;
       j--;
       step++;
     }
 
-    return reversed === "" ? "0" : reversed;
+    return result === "" ? "0" : result;
+  }
+
+  private formatStep(info: StepInfo): string {
+    return (
+      `Bước ${info.step}: Lấy ${info.digit1} cộng với ${info.digit2}` +
+      (info.carry > 0 ? ` cộng với nhớ ${info.carry}` : ``) +
+      ` được ${info.total}. Lưu ${info.digit} vào kết quả` +
+      (info.newCarry > 0 ? ` và nhớ ${info.newCarry}` : `, hết nhớ`) +
+      `. Kết quả tạm: "${info.digit + info.resultSoFar}".`
+    );
   }
 }
