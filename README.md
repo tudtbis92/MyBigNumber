@@ -1,17 +1,17 @@
 ﻿# MyBigNumber
 
-Cong 2 so lon dang chuoi + UI web minh hoa. Loi: cot doc tu phai sang trai, nhu hoc sinh tieu hoc. Web: tai dung loi qua `mybignumber`.
+Cộng 2 số lớn dạng chuỗi + UI web minh họa. Lõi: cột dọc từ phải sang trái, như học sinh tiểu học. Web: tái dùng lõi qua `mybignumber`.
 
-## Cai dat
+## Cài đặt
 
 ```sh
 npm install            # root: lib mybignumber
 cd web && npm install  # web: react + vite (link lib qua file:..)
 ```
 
-Yeu cau: Node >= ES2020, ESM.
+Yêu cầu: Node >= ES2020, ESM.
 
-## Su dung (lib)
+## Sử dụng (lib)
 
 ```ts
 import { MyBigNumber } from "mybignumber";
@@ -20,30 +20,30 @@ const svc = new MyBigNumber();
 svc.sum("1234", "897"); // "2131"
 ```
 
-So vao: chuoi chi gom `0-9`. So ra: chuoi khong so 0 thua, `"0"` neu rong.
+Số vào: chuỗi chỉ gồm `0-9`. Số ra: chuỗi không số 0 thừa, `"0"` nếu rỗng.
 
-So khac do dai OK (`"897" + "1234" = "2131"`). Nho day chuyen OK (`"999" + "1" = "1000"`). So vuot int/long OK (`"12345678901234567890" + "98765432109876543210" = "111111111011111111100"`).
+Khác độ dài OK (`"897" + "1234" = "2131"`). Nhớ dây chuyền OK (`"999" + "1" = "1000"`). Số vượt int/long OK (`"12345678901234567890" + "98765432109876543210" = "111111111011111111100"`).
 
 ## API
 
 ### `new MyBigNumber(log?)`
 
-- `log: (message: string) => void`, mac dinh `console.log`.
-- Truyen `() => {}` de tat log. Web truyen ham gom de render step list.
+- `log: (message: string) => void`, mặc định `console.log`.
+- Truyền `() => {}` để tắt log. Web truyền hàm gom để render step list.
 
 ### `sum(stn1: string, stn2: string): string`
 
-Duyet `i = stn1.length - 1`, `j = stn2.length - 1`, giu `carry`. Moi vong: `total = digit1 + digit2 + carry`, ghi so `total % 10` vao truoc `result`, `carry = floor(total / 10)`. Lap den khi het ca 2 chuoi va het nho.
+Duyệt `i = stn1.length - 1`, `j = stn2.length - 1`, giữ `carry`. Mỗi vòng: `total = digit1 + digit2 + carry`, ghi số `total % 10` vào trước `result`, `carry = floor(total / 10)`. Lặp đến khi hết cả 2 chuỗi và hết nhớ.
 
-Moi buoc goi `log()` mot dong tieng Viet:
+Mỗi bước gọi `log()` một dòng tiếng Việt:
 
 ```text
-Buoc 1: Lay 4 cong voi 7 duoc 11. Luu 1 vao ket qua va nho 1. Ket qua tam: "1".
+Bước 1: Lấy 4 cộng với 7 được 11. Lưu 1 vào kết quả và nhớ 1. Kết quả tạm: "1".
 ```
 
 ## Web UI (`web/`)
 
-React 19 + Vite 7 + Bootstrap 5. `App.tsx` co 2 o nhap (`stn1` mac dinh `1234`, `stn2` mac dinh `897`), nut `Cong`. Validate `/^[0-9]+$/`, sai thi bao loi, dung thi goi `new MyBigNumber(push).sum(a, b)`, hien ket qua + list step log. `main.tsx` mount `StrictMode`. `index.html` tieng Viet, `div#root`.
+React 19 + Vite 7 + Bootstrap 5. `App.tsx` có 2 ô nhập (`stn1` mặc định `1234`, `stn2` mặc định `897`), nút `Cộng`. Validate `/^[0-9]+$/`, sai thì báo lỗi, đúng thì gọi `new MyBigNumber(push).sum(a, b)`, hiện kết quả + list step log. `main.tsx` mount `StrictMode`. `index.html` tiếng Việt, `div#root`.
 
 ```sh
 cd web
@@ -54,7 +54,7 @@ npm run preview  # vite preview
 
 `vite.config.ts`: `plugin-react`, `optimizeDeps.include: ["mybignumber"]`.
 
-## Lennh (root)
+## Lệnh (root)
 
 ```sh
 npm run build   # tsc -> dist/
@@ -62,14 +62,14 @@ npm run demo    # build + node dist/demo.js (in 1234 + 897)
 npm test        # build + node --test tests/MyBigNumber.test.mjs (7 case)
 ```
 
-## Cau truc
+## Cấu trúc
 
 ```text
 src/MyBigNumber.ts   # class MyBigNumber + type Logger
 src/index.ts         # re-export MyBigNumber, Logger
 src/demo.ts          # demo 1234 + 897
-tests/MyBigNumber.test.mjs  # 7 case node:test tren dist/
-web/src/App.tsx      # form + validate + hien ket qua/steps
+tests/MyBigNumber.test.mjs  # 7 case node:test trên dist/
+web/src/App.tsx      # form + validate + hiện kết quả/steps
 web/src/main.tsx     # entry React
 web/src/app.css      # .app-shell max-width 720px
 web/index.html       # lang vi, div#root
