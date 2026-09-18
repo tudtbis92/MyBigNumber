@@ -5,11 +5,10 @@ Cộng 2 số lớn dạng chuỗi + UI web minh họa. Lõi: cột dọc từ p
 ## Cài đặt
 
 ```sh
-npm install            # root: lib mybignumber
-cd web && npm install  # web: react + vite (link lib qua file:..)
+cd web && npm install  # web: react + vite, lib qua ./libs/mybignumber-0.0.1.tgz
 ```
 
-Yêu cầu: Node >= ES2020, ESM.
+Yêu cầu: Node >= ES2020, ESM. Lib Task 1 đóng sẵn trong `web/libs/` (chỉ `dist`, không source). Muốn build lại lib: sang nhánh `core`, `npm pack`, copy tgz vào `web/libs`, đổi version trong `web/package.json`.
 
 ## Sử dụng (lib)
 
@@ -54,21 +53,19 @@ npm run preview  # vite preview
 
 `vite.config.ts`: `plugin-react`, `optimizeDeps.include: ["mybignumber"]`.
 
-## Lệnh (root)
+## Lệnh (web)
 
 ```sh
-npm run build   # tsc -> dist/
-npm run demo    # build + node dist/demo.js (in 1234 + 897)
-npm test        # build + node --test tests/MyBigNumber.test.mjs (7 case)
+cd web
+npm run dev      # vite dev
+npm run build    # tsc && vite build
+npm run preview  # vite preview
 ```
 
-## Cấu trúc
+## Cấu trúc (nhánh web, không source lõi)
 
 ```text
-src/MyBigNumber.ts   # class MyBigNumber + type Logger
-src/index.ts         # re-export MyBigNumber, Logger
-src/demo.ts          # demo 1234 + 897
-tests/MyBigNumber.test.mjs  # 7 case node:test trên dist/
+web/libs/mybignumber-0.0.1.tgz  # lib Task 1 đóng gói, chỉ dist (tương đương .jar)
 web/src/App.tsx      # form + validate + hiện kết quả/steps
 web/src/main.tsx     # entry React
 web/src/app.css      # .app-shell max-width 720px

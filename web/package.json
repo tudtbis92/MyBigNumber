@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "mybignumber": "file:..",
+    "mybignumber": "file:./libs/mybignumber-0.0.1.tgz",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
