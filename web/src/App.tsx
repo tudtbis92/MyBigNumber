@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MyBigNumber } from '../../src/MyBigNumber'
+import { MyBigNumber } from 'mybignumber'
 import './app.css'
 
 const DIGITS = /^[0-9]+$/

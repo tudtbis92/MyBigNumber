@@ -31,10 +31,14 @@ Lưu ý:
 
 ## Task 2 — Web (`web/`, nhánh `web`)
 
-Đề gốc đòi Spring Boot + `.jar`, nhưng lõi là TypeScript nên làm bằng React (Vite) + Bootstrap, tái dùng trực tiếp `src/MyBigNumber.ts`.
+Giáo viên chốt: chấm cả thuật toán + reuse black-box, stack chọn thuận tiện nhất. Nên dùng React (Vite) + Bootstrap, reuse lõi Task 1 như lib (`.tgz` npm tương đương `.jar`, `package.json` tương đương Maven).
+
+Black-box: `web/` chỉ `import { MyBigNumber } from 'mybignumber'` (bản `dist/` build), không import `../src`. Tiến trình lấy từ `Logger` constructor → list `Tiến trình thực hiện phép toán`.
 
 ```bash
+npm run build     # ra dist/ ESM
 cd web
-npm install
-npm run dev      # http://localhost:5173
+npm install       # link mybignumber via file:..
+npm run dev       # http://localhost:5173
+npm run build     # check production
 ```

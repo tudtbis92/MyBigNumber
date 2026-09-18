@@ -1,2 +1,2 @@
-export { MyBigNumber } from "./MyBigNumber";
-export type { Logger } from "./MyBigNumber";
+export { MyBigNumber } from "./MyBigNumber.js";
+export type { Logger } from "./MyBigNumber.js";
