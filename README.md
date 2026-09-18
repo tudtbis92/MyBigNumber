@@ -1,16 +1,16 @@
 ﻿# MyBigNumber
 
-Cong 2 so lon dang chuoi, khong gioi han do dai. Thuat toan cot doc tu phai sang trai, nhu hoc sinh tieu hoc.
+Cộng 2 số lớn dạng chuỗi, không giới hạn độ dài. Thuật toán cột dọc từ phải sang trái, như học sinh tiểu học.
 
-## Cai dat
+## Cài đặt
 
 ```sh
 npm install mybignumber
 ```
 
-Yeu cau: Node >= ES2020, ESM (`"type": "module"`).
+Yêu cầu: Node >= ES2020, ESM (`"type": "module"`).
 
-## Su dung
+## Sử dụng
 
 ```ts
 import { MyBigNumber } from "mybignumber";
@@ -19,30 +19,30 @@ const svc = new MyBigNumber();
 svc.sum("1234", "897"); // "2131"
 ```
 
-So vao: chuoi chi gom `0-9`. So ra: chuoi khong co so 0 thua, `"0"` neu rong.
+Số vào: chuỗi chỉ gồm `0-9`. Số ra: chuỗi không có số 0 thừa, `"0"` nếu rỗng.
 
-So khac do dai OK (`"897" + "1234" = "2131"`). Nho day chuyen OK (`"999" + "1" = "1000"`). So vuot int/long OK (`"12345678901234567890" + "98765432109876543210" = "111111111011111111100"`).
+Khác độ dài OK (`"897" + "1234" = "2131"`). Nhớ dây chuyền OK (`"999" + "1" = "1000"`). Số vượt int/long OK (`"12345678901234567890" + "98765432109876543210" = "111111111011111111100"`).
 
 ## API
 
 ### `new MyBigNumber(log?)`
 
-- `log: (message: string) => void`, mac dinh `console.log`.
-- Truyen `() => {}` de tat log. Truyen ham tu gom de thu step log.
+- `log: (message: string) => void`, mặc định `console.log`.
+- Truyền `() => {}` để tắt log. Truyền hàm tự gom để thu step log.
 
 ### `sum(stn1: string, stn2: string): string`
 
-Duyet `i = stn1.length - 1`, `j = stn2.length - 1`, giu `carry`. Moi vong: `total = digit1 + digit2 + carry`, ghi so `total % 10` vao truoc `result`, `carry = floor(total / 10)`. Lap den khi het ca 2 chuoi va het nho.
+Duyệt `i = stn1.length - 1`, `j = stn2.length - 1`, giữ `carry`. Mỗi vòng: `total = digit1 + digit2 + carry`, ghi số `total % 10` vào trước `result`, `carry = floor(total / 10)`. Lặp đến khi hết cả 2 chuỗi và hết nhớ.
 
-Moi buoc goi `log()` mot dong tieng Viet:
+Mỗi bước gọi `log()` một dòng tiếng Việt:
 
 ```text
-Buoc 1: Lay 4 cong voi 7 duoc 11. Luu 1 vao ket qua va nho 1. Ket qua tam: "1".
+Bước 1: Lấy 4 cộng với 7 được 11. Lưu 1 vào kết quả và nhớ 1. Kết quả tạm: "1".
 ```
 
-Neu `carry > 0`: them `cong voi nho X`. Neu het nho: ghi `, het nho`.
+Nếu `carry > 0`: thêm `cộng với nhớ X`. Nếu hết nhớ: ghi `, hết nhớ`.
 
-## Lennh
+## Lệnh
 
 ```sh
 npm run build   # tsc -> dist/
@@ -50,13 +50,13 @@ npm run demo    # build + node dist/demo.js (in 1234 + 897)
 npm test        # build + node --test tests/MyBigNumber.test.mjs
 ```
 
-## Cau truc
+## Cấu trúc
 
 ```text
 src/MyBigNumber.ts   # class MyBigNumber + type Logger
 src/index.ts         # re-export MyBigNumber, Logger
 src/demo.ts          # demo 1234 + 897
-tests/MyBigNumber.test.mjs  # 7 case node:test tren dist/
+tests/MyBigNumber.test.mjs  # 7 case node:test trên dist/
 dist/                # output tsc (declaration + sourceMap)
 ```
 
