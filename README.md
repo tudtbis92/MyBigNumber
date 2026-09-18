@@ -17,7 +17,7 @@ npm test        # 7 test, dùng test-runner có sẵn của Node
 ## Dùng trong code khác
 
 ```ts
-import { MyBigNumber } from "./dist/MyBigNumber";
+import { MyBigNumber } from "./dist/MyBigNumber.js";
 
 new MyBigNumber().sum("1234", "897"); // "2131", log từng bước ra console
 new MyBigNumber(() => {}).sum("999", "1"); // "1000", tắt log
