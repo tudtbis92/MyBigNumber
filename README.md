@@ -19,7 +19,7 @@ const svc = new MyBigNumber();
 svc.sum("1234", "897"); // "2131"
 ```
 
-Số vào: chuỗi chỉ gồm `0-9`. Số ra: chuỗi không có số 0 thừa, `"0"` nếu rỗng.
+Số vào: chuỗi khác rỗng chỉ gồm `0-9`, sai định dạng ném `Error`. Số ra: chuỗi không có số 0 thừa.
 
 Khác độ dài OK (`"897" + "1234" = "2131"`). Nhớ dây chuyền OK (`"999" + "1" = "1000"`). Số vượt int/long OK (`"12345678901234567890" + "98765432109876543210" = "111111111011111111100"`).
 
