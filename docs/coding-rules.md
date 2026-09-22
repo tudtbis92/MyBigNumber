@@ -7,4 +7,4 @@
 5. **Exception Handling:** Không dùng `catch` chung chung để nuốt lỗi. Ném `Error` khi tham số đầu vào chứa ký tự không phải số (`0-9`).
 6. **Tests:** Mọi thay đổi core phải kèm test `node:test` chạy trên `dist/` (`npm test` build trước rồi test). Giữ test xanh 100%.
 7. **Loop Rule (Lab):** Không khai báo biến (`const`/`let`/`var`) bên trong thân vòng lặp. Khai báo một lần ngoài loop, gán lại mỗi vòng. Ngoại lệ duy nhất: biến điều khiển trong header `for` (vd: `for (let i = 0; ...)`). Mục đích: mọi code tuân thủ cùng một rule để AI kiểm tra thống nhất.
-8. **String Building:** Không prepend (`s = chunk + s`) trong vòng lặp — O(n²) do copy cả chuỗi mỗi vòng. Gom bằng `array.push()` rồi `reverse().join()` một lần ở cuối.
+8. **String Building:** Không prepend (`s = chunk + s`) trong vòng lặp. Cấp phát mảng đủ cỡ (`max(len1, len2) + 1`), điền chữ số từ cuối về đầu theo index, `slice().join()` một lần ở cuối — không cần reverse.
