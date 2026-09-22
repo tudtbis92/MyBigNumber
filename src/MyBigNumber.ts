@@ -25,7 +25,6 @@ export class MyBigNumber {
     let i = stn1.length - 1;
     let j = stn2.length - 1;
     let carry = 0;
-    let result = "";
     let step = 1;
     // Coding rule (Lab): không khai báo biến trong vòng lặp, gán lại mỗi vòng.
     let digit1 = 0;
@@ -33,6 +32,10 @@ export class MyBigNumber {
     let total = 0;
     let digit = 0;
     let newCarry = 0;
+    // Gom chữ số bằng append vào mảng (O(1) mỗi vòng), đảo + nối một lần ở cuối.
+    // Prepend trực tiếp vào chuỗi mỗi vòng là O(n^2) vì phải copy cả chuỗi cũ.
+    const parts: string[] = [];
+    let prefix = "";
 
     while (i >= 0 || j >= 0 || carry > 0) {
       digit1 = i >= 0 ? stn1.charCodeAt(i) - CHAR_CODE_ZERO : 0;
@@ -41,15 +44,20 @@ export class MyBigNumber {
       digit = total % 10;
       newCarry = Math.floor(total / 10);
 
-      this.log(this.formatStep({ step, digit1, digit2, carry, total, digit, newCarry, resultSoFar: result }));
+      // Chuỗi hiển thị cho log bước (tính từ mảng đã gom, thứ tự MSD trước).
+      // Chi phí này gắn với tính năng step-logging; kết quả trả về vẫn O(n).
+      prefix = parts.slice().reverse().join("");
 
-      result = digit.toString() + result;
+      this.log(this.formatStep({ step, digit1, digit2, carry, total, digit, newCarry, resultSoFar: prefix }));
+
+      parts.push(digit.toString());
       carry = newCarry;
       i--;
       j--;
       step++;
     }
 
+    const result = parts.reverse().join("");
     return result === "" ? "0" : result;
   }
 
