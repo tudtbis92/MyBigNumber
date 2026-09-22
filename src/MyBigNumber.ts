@@ -18,6 +18,10 @@ export class MyBigNumber {
   constructor(private readonly log: Logger = console.log) {}
 
   sum(stn1: string, stn2: string): string {
+    if (!/^[0-9]+$/.test(stn1) || !/^[0-9]+$/.test(stn2)) {
+      throw new Error(`MyBigNumber.sum chỉ nhận chuỗi số (0-9), nhận được: "${stn1}", "${stn2}".`);
+    }
+
     let i = stn1.length - 1;
     let j = stn2.length - 1;
     let carry = 0;

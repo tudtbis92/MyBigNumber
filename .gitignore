@@ -1,3 +1,6 @@
 node_modules/
 dist/
 *.pdf
+.env*
+secrets/
+*.log

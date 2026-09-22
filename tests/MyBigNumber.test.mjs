@@ -39,4 +39,9 @@ describe("MyBigNumber.sum (core, Task 1)", () => {
     assert.equal(logs.length, 4);
     assert.match(logs[0], /Lấy 4 cộng với 7 được 11/);
   });
+
+  it("ném lỗi khi input chứa ký tự không phải số", () => {
+    assert.throws(() => silent.sum("12a", "897"), /chỉ nhận chuỗi số/);
+    assert.throws(() => silent.sum("123", ""), /chỉ nhận chuỗi số/);
+  });
 });
