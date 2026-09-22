@@ -10,11 +10,14 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "demo": "npm run build && node dist/demo.js",
-    "test": "npm run build && node --test tests/MyBigNumber.test.mjs"
+    "test": "npm run build && node --test tests/MyBigNumber.test.mjs",
+    "coverage": "npm run build && c8 --reporter=lcov --reporter=text node --test tests/MyBigNumber.test.mjs"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +25,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^22.20.3",
+    "c8": "^12.0.0",
     "typescript": "^7.0.2"
   }
 }

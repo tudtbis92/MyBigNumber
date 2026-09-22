@@ -27,13 +27,19 @@ export class MyBigNumber {
     let carry = 0;
     let result = "";
     let step = 1;
+    // Coding rule (Lab): không khai báo biến trong vòng lặp, gán lại mỗi vòng.
+    let digit1 = 0;
+    let digit2 = 0;
+    let total = 0;
+    let digit = 0;
+    let newCarry = 0;
 
     while (i >= 0 || j >= 0 || carry > 0) {
-      const digit1 = i >= 0 ? stn1.charCodeAt(i) - CHAR_CODE_ZERO : 0;
-      const digit2 = j >= 0 ? stn2.charCodeAt(j) - CHAR_CODE_ZERO : 0;
-      const total = digit1 + digit2 + carry;
-      const digit = total % 10;
-      const newCarry = Math.floor(total / 10);
+      digit1 = i >= 0 ? stn1.charCodeAt(i) - CHAR_CODE_ZERO : 0;
+      digit2 = j >= 0 ? stn2.charCodeAt(j) - CHAR_CODE_ZERO : 0;
+      total = digit1 + digit2 + carry;
+      digit = total % 10;
+      newCarry = Math.floor(total / 10);
 
       this.log(this.formatStep({ step, digit1, digit2, carry, total, digit, newCarry, resultSoFar: result }));
 
