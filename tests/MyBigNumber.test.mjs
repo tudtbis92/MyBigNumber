@@ -45,6 +45,10 @@ describe("MyBigNumber.sum (core, Task 1)", () => {
     assert.throws(() => silent.sum("123", ""), /chỉ nhận chuỗi số/);
   });
 
+  it("số 0 ở đầu: sum(\"007\", \"003\") = \"10\"", () => {
+    assert.equal(silent.sum("007", "003"), "10");
+  });
+
   it("quy mô lớn: 500 chữ số 9 cộng 1", () => {
     assert.equal(silent.sum("9".repeat(500), "1"), "1" + "0".repeat(500));
   });
