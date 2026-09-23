@@ -61,8 +61,9 @@ export class MyBigNumber {
       step++;
     }
 
-    const result = parts.slice(pos).join("");
-    return result === "" ? "0" : result;
+    const raw = parts.slice(pos).join("");
+    const stripped = raw.replace(/^0+(?=[0-9])/, "");
+    return stripped === "" ? "0" : stripped;
   }
 
   private formatStep(info: StepInfo): string {
