@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: MyBigNumber API
+  version: 0.0.2
+  description: Cộng 2 số lớn dạng chuỗi qua HTTP. Thuật toán delegate 100% cho core MyBigNumber.
+paths:
+  /api/sum:
+    post:
+      summary: Cộng 2 số lớn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SumRequest"
+            examples:
+              basic:
+                value:
+                  stn1: "1234"
+                  stn2: "897"
+      responses:
+        "200":
+          description: Cộng thành công
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SumResponse"
+        "400":
+          description: Input không hợp lệ hoặc JSON vỡ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "413":
+          description: Body vượt giới hạn 100kb
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+        "500":
+          description: Lỗi không ngờ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /health:
+    get:
+      summary: Kiểm tra sức khỏe service
+      responses:
+        "200":
+          description: Service sống
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /openapi.json:
+    get:
+      summary: Trả OpenAPI document (JSON)
+      responses:
+        "200":
+          description: OpenAPI document
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    SumRequest:
+      type: object
+      required:
+        - stn1
+        - stn2
+      additionalProperties: false
+      properties:
+        stn1:
+          type: string
+          pattern: "^[0-9]+$"
+          description: Số thứ nhất, chuỗi chỉ gồm 0-9
+        stn2:
+          type: string
+          pattern: "^[0-9]+$"
+          description: Số thứ hai, chuỗi chỉ gồm 0-9
+    SumResponse:
+      type: object
+      required:
+        - result
+        - steps
+      additionalProperties: false
+      properties:
+        result:
+          type: string
+          pattern: "^[0-9]+$"
+        steps:
+          type: array
+          items:
+            type: string
+    ErrorEnvelope:
+      type: object
+      required:
+        - code
+        - message
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          enum: [INVALID_INPUT, INVALID_JSON, NOT_FOUND, PAYLOAD_TOO_LARGE, INTERNAL_ERROR]
+        message:
+          type: string
+        details:
+          type: object
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        version:
+          type: string
