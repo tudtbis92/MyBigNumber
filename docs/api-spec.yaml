@@ -61,12 +61,8 @@ paths:
   /usage:
     get:
       operationId: listUsage
-      summary: List usage records with filters
+      summary: List usage records with filters (always scoped to the caller API key)
       parameters:
-        - name: clientId
-          in: query
-          schema:
-            type: string
         - name: status
           in: query
           schema:
@@ -103,7 +99,8 @@ components:
     DigitString:
       type: string
       pattern: '^[0-9]+$'
-      description: Non-empty digit string. Violations yield 422.
+      maxLength: 10000
+      description: Non-empty digit string, at most 10000 chars. Violations yield 422.
     AddRequest:
       type: object
       required: [a, b]
