@@ -2,6 +2,9 @@
 
 Thư viện nội bộ, dùng trực tiếp qua import (không có HTTP layer).
 
+> HTTP expansion layer (spec-first, chưa implement): xem `docs/api-spec.yaml`
+> (OpenAPI 3.1) và `docs/api-expansion-design.md`.
+
 ## `new MyBigNumber(log?)`
 
 - `log?: (message: string) => void`, mặc định `console.log`.
