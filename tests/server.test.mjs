@@ -12,7 +12,7 @@ before(async () => {
   const app = createApp({
     calculator: new MyBigNumber(() => {}),
     store: new InMemoryStore(),
-    apiKeys: new Set([KEY]),
+    apiKeys: new Set([KEY, "second-key"]),
     log: () => {},
   });
   await new Promise((resolve) => server = app.listen(0, resolve));
@@ -71,5 +71,36 @@ describe("API (Lab 3.2 slices)", () => {
     assert.ok(Array.isArray(body.items));
     assert.ok(body.items.length >= 2);
     assert.ok(body.items.every((item) => item.status === "COMPUTED"));
+  });
+
+  it("negative: SQL-injection string is rejected 422, never executed", async () => {
+    const res = await req("/v1/add", { method: "POST", body: JSON.stringify({ a: "1'; DROP TABLE work_orders;--", b: "2" }) });
+    assert.equal(res.status, 422);
+  });
+
+  it("negative: unicode digits and wrong types are rejected 422", async () => {
+    for (const payload of [{ a: "١٢٣", b: "1" }, { a: 123, b: "1" }, { a: null, b: "1" }, {}, null, "justastring"]) {
+      const res = await req("/v1/add", { method: "POST", body: JSON.stringify(payload) });
+      assert.equal(res.status, 422);
+    }
+  });
+
+  it("negative: oversized input is rejected 422", async () => {
+    const res = await req("/v1/add", { method: "POST", body: JSON.stringify({ a: "9".repeat(10001), b: "1" }) });
+    assert.equal(res.status, 422);
+  });
+
+  it("negative: unknown JSON keys are rejected 422", async () => {
+    const res = await req("/v1/add", { method: "POST", body: JSON.stringify({ a: "1", b: "2", admin: true }) });
+    assert.equal(res.status, 422);
+  });
+
+  it("negative: usage is scoped to caller key", async () => {
+    const other = await fetch(base + "/v1/usage", { headers: { "x-api-key": "second-key" } });
+    assert.equal(other.status, 200);
+    const otherItems = (await other.json()).items;
+    const mine = (await (await req("/v1/usage?limit=200")).json()).items;
+    assert.ok(mine.length > 0);
+    assert.ok(otherItems.every((item) => !mine.some((own) => own.requestId === item.requestId)));
   });
 });

@@ -14,6 +14,7 @@ export interface AppDeps {
 
 const DIGIT_RE = /^[0-9]+$/;
 const MAX_LIMIT = 200;
+const MAX_INPUT_DIGITS = 10000;
 const RATE_PER_MINUTE = 60;
 
 interface RateBucket {
@@ -97,7 +98,8 @@ export function createApp(deps: AppDeps): Server {
         const limitRaw = Number(url.searchParams.get("limit") ?? "50");
         const limit = Number.isFinite(limitRaw) ? Math.min(Math.max(Math.floor(limitRaw), 1), MAX_LIMIT) : 50;
         const status = statusParam === "COMPUTED" || statusParam === "REJECTED" ? (statusParam as UsageStatus) : undefined;
-        const items = deps.store.list({ clientId: url.searchParams.get("clientId") ?? undefined, status, limit });
+        // F1 (OWASP A01): usage is always scoped to the caller key. No cross-client reads.
+        const items = deps.store.list({ clientId, status, limit });
         send(res, 200, { items });
         return;
       }
@@ -121,9 +123,27 @@ export function createApp(deps: AppDeps): Server {
         return;
       }
       const body = parsed as { a?: unknown; b?: unknown };
-      if (typeof body.a !== "string" || typeof body.b !== "string" || !DIGIT_RE.test(body.a) || !DIGIT_RE.test(body.b)) {
-        reject(clientId, started, "Non-digit input");
-        send(res, 422, problem(422, "Unprocessable Entity", "a and b must be non-empty digit strings"));
+      if (typeof body !== "object" || body === null) {
+        reject(clientId, started, "Non-object body");
+        send(res, 422, problem(422, "Unprocessable Entity", "Body must be a JSON object"));
+        return;
+      }
+      const keys = Object.keys(body);
+      if (keys.some((key) => key !== "a" && key !== "b")) {
+        reject(clientId, started, "Unknown fields");
+        send(res, 422, problem(422, "Unprocessable Entity", "Only a and b are allowed"));
+        return;
+      }
+      if (
+        typeof body.a !== "string" ||
+        typeof body.b !== "string" ||
+        !DIGIT_RE.test(body.a) ||
+        !DIGIT_RE.test(body.b) ||
+        body.a.length > MAX_INPUT_DIGITS ||
+        body.b.length > MAX_INPUT_DIGITS
+      ) {
+        reject(clientId, started, "Non-digit or oversized input");
+        send(res, 422, problem(422, "Unprocessable Entity", "a and b must be digit strings of at most 10000 chars"));
         return;
       }
       let result: string;
