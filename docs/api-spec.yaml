@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: MyBigNumber Computation API
+  version: 0.1.0
+  description: >
+    HTTP layer over the MyBigNumber exact-decimal-addition core
+    (see docs/domain-model.md and docs/api-expansion-design.md).
+    Spec-first: no implementation exists; this file is the contract.
+servers:
+  - url: https://api.example.com/v1
+security:
+  - apiKey: []
+paths:
+  /add:
+    post:
+      operationId: createComputation
+      summary: Add two non-negative integer strings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRequest'
+      responses:
+        '201':
+          description: Computed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /computations/{requestId}:
+    get:
+      operationId: getComputation
+      summary: Get one computation by request ID
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputationRecord'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /usage:
+    get:
+      operationId: listUsage
+      summary: List usage records with filters
+      parameters:
+        - name: clientId
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [COMPUTED, REJECTED]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+      responses:
+        '200':
+          description: Paged usage records
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComputationRecord'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    DigitString:
+      type: string
+      pattern: '^[0-9]+$'
+      description: Non-empty digit string. Violations yield 422.
+    AddRequest:
+      type: object
+      required: [a, b]
+      additionalProperties: false
+      properties:
+        a:
+          $ref: '#/components/schemas/DigitString'
+        b:
+          $ref: '#/components/schemas/DigitString'
+    AddResponse:
+      type: object
+      required: [result, requestId]
+      additionalProperties: false
+      properties:
+        result:
+          type: string
+          description: Canonical sum, no leading zeros.
+        requestId:
+          type: string
+          format: uuid
+    ComputationRecord:
+      type: object
+      required: [requestId, clientId, inputDigits, durationMs, status, createdAt]
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+        inputDigits:
+          type: integer
+        durationMs:
+          type: integer
+        status:
+          type: string
+          enum: [COMPUTED, REJECTED]
+        createdAt:
+          type: string
+          format: date-time
+    Problem:
+      type: object
+      required: [type, title, status, detail]
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+  responses:
+    BadRequest:
+      description: Malformed JSON body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unprocessable:
+      description: Validation failure (non-digit input)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: Quota or rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Unknown requestId
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
