@@ -47,8 +47,14 @@ Nếu `carry > 0`: thêm `cộng với nhớ X`. Nếu hết nhớ: ghi `, hết
 ```sh
 npm run build   # tsc -> dist/
 npm run demo    # build + node dist/demo.js (in 1234 + 897)
-npm test        # build + node --test tests/MyBigNumber.test.mjs
+npm test        # build + node --test tests/MyBigNumber.test.mjs tests/server.test.mjs
+npm run serve   # build + node dist/serve.js (HTTP API, PORT + API_KEYS env)
 ```
+
+## HTTP API (Lab 3.2)
+
+Spec: `docs/api-spec.yaml` (OpenAPI 3.1). Chạy `PORT=8080 API_KEYS=dev-key npm run serve`.
+Zero runtime dependency (`node:http` stdlib). DI qua `createApp({calculator, store, apiKeys, log})`.
 
 ## Cấu trúc
 
@@ -56,7 +62,11 @@ npm test        # build + node --test tests/MyBigNumber.test.mjs
 src/MyBigNumber.ts   # class MyBigNumber + type Logger
 src/index.ts         # re-export MyBigNumber, Logger
 src/demo.ts          # demo 1234 + 897
-tests/MyBigNumber.test.mjs  # 7 case node:test trên dist/
+src/server.ts        # createApp factory (HTTP, DI) — Lab 3.2
+src/store.ts         # InMemoryStore usage records
+src/serve.ts         # entry: wire deps + listen
+tests/MyBigNumber.test.mjs  # 10 case node:test trên dist/
+tests/server.test.mjs       # 6 case API trên port ephemeral
 dist/                # output tsc (declaration + sourceMap)
 ```
 

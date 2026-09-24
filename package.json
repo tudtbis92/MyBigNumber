@@ -16,8 +16,9 @@
   "scripts": {
     "build": "tsc",
     "demo": "npm run build && node dist/demo.js",
-    "test": "npm run build && node --test tests/MyBigNumber.test.mjs",
-    "coverage": "npm run build && c8 --reporter=lcov --reporter=text node --test tests/MyBigNumber.test.mjs"
+    "test": "npm run build && node --test tests/MyBigNumber.test.mjs tests/server.test.mjs",
+    "coverage": "npm run build && c8 --reporter=lcov --reporter=text node --test tests/MyBigNumber.test.mjs tests/server.test.mjs",
+    "serve": "npm run build && node dist/serve.js"
   },
   "keywords": [],
   "author": "",
